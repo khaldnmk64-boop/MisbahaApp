@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>مسبحة إلكترونية</title>
+  <style>
+    html,body{
+      height:100%;
+      margin:0;
+      padding:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Naskh Arabic", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .root{
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      background:#FF4C4C; /* أحمر افتراضي */
+      transition: background 200ms ease;
+      direction:rtl;
+    }
+    .counter{
+      position: absolute;
+      top:28px;
+      left:0; right:0;
+      text-align:center;
+      font-size:28px;
+      font-weight:700;
+      color:#ffffff;
+    }
+    .btn{
+      width:200px;
+      height:200px;
+      border-radius:100px;
+      border:none;
+      background: #FFFFFF;
+      font-size:22px;
+      font-weight:700;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+      -webkit-appearance:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      touch-action: manipulation;
+    }
+    .btn:active{ transform: scale(0.98); }
+    @media (max-width:420px){
+      .btn{ width:160px; height:160px; font-size:20px; border-radius:80px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="root" id="root">
+    <div class="counter" id="counter">0</div>
+    <button class="btn" id="btn">تسبيح</button>
+  </div>
+
+  <script>
+    const root = document.getElementById('root');
+    const btn = document.getElementById('btn');
+    const counter = document.getElementById('counter');
+
+    const RED = '#FF4C4C';
+    const GREEN = '#4CAF50';
+
+    let count = 0;
+    counter.textContent = count;
+
+    let revertTimer = null;
+
+    function changeToGreenThenRevert(){
+      root.style.background = GREEN;
+
+      if(revertTimer) clearTimeout(revertTimer);
+
+      revertTimer = setTimeout(()=>{
+        root.style.background = RED;
+        revertTimer = null;
+      }, 2000);
+    }
+
+    btn.addEventListener('click', ()=>{
+      count++;
+      counter.textContent = count;
+      changeToGreenThenRevert();
+    });
+
+    btn.addEventListener('touchstart', (e)=>{
+      e.preventDefault();
+      btn.click();
+    }, {passive:false});
+
+    window.addEventListener('beforeunload', ()=>{
+      if(revertTimer) clearTimeout(revertTimer);
+    });
+  </script>
+</body>
+</html>
